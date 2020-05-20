@@ -16,9 +16,11 @@ void test_search_aaaaaaaaaZ();
 
 int main()
 {
+#if	1
 	test_searchRandom();
 	test_search_aaaaZ();
 	test_search_aaaaaaaaaZ();
+#endif
 #if	0
 	StrSearch src;
 	src.setup("hoge");
@@ -34,6 +36,12 @@ int main()
 	if (ptr2 != nullptr)
 		cout << "ptr2 = " << ptr2 << "\n";
 #endif
+#if	0
+	StrSearch src;
+	src.setup("aaaaZ");
+	string buffer = "aaaaaZ";
+	cchar *ptr = src.doSearch(&buffer[0]);
+#endif
 	//
     std::cout << "OK\n";
 }
@@ -48,6 +56,7 @@ void test_searchRandom()
 	string pat;
 	const int PAT_LEN = 5;
 	for (int i = 0; i < PAT_LEN; ++i) pat.push_back('a' + g_mt() % 16);
+	cout << "pat = '" << pat << "'\n";
 	if (true) {
 		cout << "std::strstr():\n";
 		int nMatch = 0;

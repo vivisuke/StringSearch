@@ -6,8 +6,8 @@
 ◎ C 05/20 05/21 0.001 ToDo stristr 関数
 ◎ C 05/21 05/21 0.001 ToDo 100万ランダム文字（a-z）テキストに対して、5,10ランダム文字（a-z）をテキスト末尾まで検索時間計測（strstr, stristr）
 ◎ C 05/21 05/21 0.001 ToDo 「aaaa...aZ」テキストに対して、「aaaaZ」「aaaaaaaaaZ」検索時間計測（strstr, stristr）
-● C 05/21             ToDo bitap 実装
-● C 05/21             ToDo 
+◎ C 05/21 05/21 0.001 ToDo bitap 実装
+◎ C 05/21 05/21 0.001 問題 strstr(): "aaa....aaaZ" に対して "aaaaZ" がマッチしない？
 ● C 05/21             ToDo 
 ● C 05/21             ToDo 
 ● C 05/21             ToDo 

@@ -11,6 +11,9 @@ StrSearch::~StrSearch()
 bool StrSearch::setup(cchar *pat, /*int sz,*/ uint opt, uchar algorithm)
 {
 	m_pat = pat;
+	const int plen = m_pat.size();
+	m_ignoreCase = (opt & IGNORE_CASE) != 0;
+	const int WORD_SIZE = 0x10000;
 	//m_pat = string(pat, pat+sz);
 	switch( m_algorithm = algorithm ) {
 	case STRSTR:
@@ -18,6 +21,29 @@ bool StrSearch::setup(cchar *pat, /*int sz,*/ uint opt, uchar algorithm)
 			m_doSearchFunc = &StrSearch::strstr;		//	英字大文字小文字区別
 		else
 			m_doSearchFunc = &StrSearch::stristr;		//	英字大文字小文字同一視
+		break;
+	case SHIFT_AND:
+		if( plen > 32 ) return false;;
+		for(int i = 0; i < 0x100; ++i)					//	skip テーブル初期化
+			m_skipTable[i] = m_rskipTable[i] = plen;
+		m_CV = new RegType[WORD_SIZE]();		//	() for 0 で初期化
+		if( !m_ignoreCase ) {
+			for(int i = 0, mask = 1; i < plen; ++i, mask<<=1)
+				m_CV[pat[i]] |= mask;
+			for(int i = 0; i < plen; ++i)					//	for 順方向検索
+				m_skipTable[(uchar)pat[i]] = plen - i - 1;
+		} else {
+			for(int i = 0, mask = 1; i < plen; ++i, mask<<=1) {
+				m_CV[tolower(pat[i])] |= mask;
+				m_CV[toupper(pat[i])] |= mask;
+			}
+			for(int i = 0; i < plen; ++i) {					//	for 順方向検索
+				m_skipTable[(uchar)tolower(pat[i])] = plen - i - 1;
+				m_skipTable[(uchar)toupper(pat[i])] = plen - i - 1;
+			}
+		}
+		//if( algorithm == SHIFT_AND )
+			m_doSearchFunc = &StrSearch::a_bitmap_strstr;
 		break;
 	default:
 		m_doSearchFunc = nullptr;
@@ -47,8 +73,8 @@ bool StrSearch::isMatch(cchar* text)
 	while( (ch = *pat++) != '\0' ) {
 		if( *text++ != ch )		//	文字不一致
 			return false;
-		if( *text == '\0' )		//	検索テキスト末尾
-			return false;
+		//if( *text == '\0' )		//	検索テキスト末尾
+		//	return false;
 	}
 	return true;
 }
@@ -59,8 +85,8 @@ bool StrSearch::isMatchIC(cchar* text)		//	大文字小文字同一視 マッチ
 	while( (ch = *pat++) != '\0' ) {
 		if( tolower(*text++) != tolower(ch) )		//	文字不一致
 			return false;
-		if( *text == '\0' )		//	検索テキスト末尾
-			return false;
+		//if( *text == '\0' )		//	検索テキスト末尾
+		//	return false;
 	}
 	return true;
 }
@@ -115,6 +141,17 @@ cchar* StrSearch::stristr(cchar* from, cchar* to)	//	マッチした場合はそ
 				break;	//	不一致
 		}
 		++from;
+	}
+	return nullptr;
+}
+cchar* StrSearch::a_bitmap_strstr(cchar* text)
+{
+	RegType R = 0;
+	const int plen = m_pat.size();
+	RegType Matched = 1 << (plen - 1);
+	while( *text != '\0' ) {
+		R = ((R<<1) + 1) & m_CV[(uchar)*text++];
+		if( (R & Matched) ) return text - 1;
 	}
 	return nullptr;
 }
