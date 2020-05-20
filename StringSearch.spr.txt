@@ -1,0 +1,4 @@
+﻿StringSearch.spr.txt
+
+◎ C 05/20 05/20 0.001 ToDo プロジェクト作成
+● C 05/20             ToDo 
