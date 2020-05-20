@@ -137,6 +137,46 @@ void test_searchRandom()
 		cout << "nMatch = " << nMatch << ", ";
 		cout << "dur = " << msec << "msec\n";
 	}
+	if (true) {
+		cout << "StrSearch::bitap():\n";
+		int nMatch = 0;
+		auto start = std::chrono::system_clock::now();      // 計測スタート時刻を保存
+		for (int cnt = 0; cnt != 100; ++cnt) {
+			src.setup(&pat[0], 0, StrSearch::SHIFT_AND);
+			cchar* ptr = &buf[0];
+			for(;;) {
+				ptr = src.doSearch(ptr);
+				if( ptr == nullptr ) break;
+				++nMatch;
+				++ptr;		//	次の位置から検索
+			}
+		}
+		auto end = std::chrono::system_clock::now();       // 計測終了時刻を保存
+		auto dur = end - start;        // 要した時間を計算
+		auto msec = std::chrono::duration_cast<std::chrono::milliseconds>(dur).count();
+		cout << "nMatch = " << nMatch << ", ";
+		cout << "dur = " << msec << "msec\n";
+	}
+	if (true) {
+		cout << "StrSearch::bitap(), opt = ignore_case:\n";
+		int nMatch = 0;
+		auto start = std::chrono::system_clock::now();      // 計測スタート時刻を保存
+		for (int cnt = 0; cnt != 100; ++cnt) {
+			src.setup(&pat[0], StrSearch::IGNORE_CASE, StrSearch::SHIFT_AND);
+			cchar* ptr = &buf[0];
+			for (;;) {
+				ptr = src.doSearch(ptr);
+				if (ptr == nullptr) break;
+				++nMatch;
+				++ptr;		//	次の位置から検索
+			}
+		}
+		auto end = std::chrono::system_clock::now();       // 計測終了時刻を保存
+		auto dur = end - start;        // 要した時間を計算
+		auto msec = std::chrono::duration_cast<std::chrono::milliseconds>(dur).count();
+		cout << "nMatch = " << nMatch << ", ";
+		cout << "dur = " << msec << "msec\n";
+	}
 	//
 	cout << "\n";
 }
@@ -207,6 +247,26 @@ void test_search_aaaaZ()
 		cout << "nMatch = " << nMatch << ", ";
 		cout << "dur = " << msec << "msec\n";
 	}
+	if (true) {
+		cout << "StrSearch::bitap():\n";
+		int nMatch = 0;
+		auto start = std::chrono::system_clock::now();      // 計測スタート時刻を保存
+		for (int cnt = 0; cnt != 100; ++cnt) {
+			src.setup(&pat[0], 0, StrSearch::SHIFT_AND);
+			cchar* ptr = &buf[0];
+			for(;;) {
+				ptr = src.doSearch(ptr);
+				if( ptr == nullptr ) break;
+				++nMatch;
+				++ptr;		//	次の位置から検索
+			}
+		}
+		auto end = std::chrono::system_clock::now();       // 計測終了時刻を保存
+		auto dur = end - start;        // 要した時間を計算
+		auto msec = std::chrono::duration_cast<std::chrono::milliseconds>(dur).count();
+		cout << "nMatch = " << nMatch << ", ";
+		cout << "dur = " << msec << "msec\n";
+	}
 	//
 	cout << "\n";
 }
@@ -263,6 +323,26 @@ void test_search_aaaaaaaaaZ()
 		auto start = std::chrono::system_clock::now();      // 計測スタート時刻を保存
 		for (int cnt = 0; cnt != 100; ++cnt) {
 			src.setup(&pat[0], StrSearch::IGNORE_CASE);
+			cchar* ptr = &buf[0];
+			for(;;) {
+				ptr = src.doSearch(ptr);
+				if( ptr == nullptr ) break;
+				++nMatch;
+				++ptr;		//	次の位置から検索
+			}
+		}
+		auto end = std::chrono::system_clock::now();       // 計測終了時刻を保存
+		auto dur = end - start;        // 要した時間を計算
+		auto msec = std::chrono::duration_cast<std::chrono::milliseconds>(dur).count();
+		cout << "nMatch = " << nMatch << ", ";
+		cout << "dur = " << msec << "msec\n";
+	}
+	if (true) {
+		cout << "StrSearch::bitap():\n";
+		int nMatch = 0;
+		auto start = std::chrono::system_clock::now();      // 計測スタート時刻を保存
+		for (int cnt = 0; cnt != 100; ++cnt) {
+			src.setup(&pat[0], 0, StrSearch::SHIFT_AND);
 			cchar* ptr = &buf[0];
 			for(;;) {
 				ptr = src.doSearch(ptr);
