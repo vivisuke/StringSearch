@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <string>
+#include <functional>
 
 typedef const char cchar;
 typedef unsigned char uchar;
@@ -29,10 +30,20 @@ public:
 	
 public:
 	void	clear();
-	bool	setup(cchar *pat, int sz, uint opt = 0, uchar algorithm = STRSTR);
+	bool	setup(cchar *pat, uint opt = 0, uchar algorithm = STRSTR);
+	//bool	setup(cchar *pat, int sz, uint opt = 0, uchar algorithm = STRSTR);
 
 public:
+	cchar*	doSearch(cchar* from, cchar* to);	//	マッチした場合はその先頭アドレスを返す、マッチしない場合は nullptr を返す
+	cchar*	doSearch(cchar* text);				//	マッチした場合はその先頭アドレスを返す、マッチしない場合は nullptr を返す
+	
+protected:
 	cchar*	strstr(cchar*, cchar*);		//	マッチした場合はその先頭アドレスを返す、マッチしない場合は nullptr を返す
+	cchar*	stristr(cchar*, cchar*);	//	マッチした場合はその先頭アドレスを返す、マッチしない場合は nullptr を返す
+	cchar*	strstr(cchar*);			//	マッチした場合はその先頭アドレスを返す、マッチしない場合は nullptr を返す
+	cchar*	stristr(cchar*);		//	マッチした場合はその先頭アドレスを返す、マッチしない場合は nullptr を返す
+	bool	isMatch(cchar*);
+	bool	isMatchIC(cchar*);		//	大文字小文字同一視 マッチチェック
 	
 private:
 	uint	m_opt;
@@ -40,5 +51,7 @@ private:
 	bool	m_wholeWordOnly;		//	単語単位
 	uchar	m_algorithm;
 	std::string		m_pat;			//	検索パターン
-	cchar*	(StrSearch::*m_strstrAFunc)(cchar*, cchar*);
+	cchar*	(StrSearch::*m_doSearchFunc)(cchar*);
+	//cchar*	(StrSearch::*m_doSearchFunc)(cchar*, cchar*);
+	//std::function<cchar* (cchar*, cchar*)>	m_doSearchFunc;
 };
