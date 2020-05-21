@@ -11,7 +11,7 @@ StrSearch::~StrSearch()
 bool StrSearch::setup(cchar *pat, /*int sz,*/ uint opt, uchar algorithm)
 {
 	m_pat = pat;
-	const int plen = m_pat.size();
+	const int plen = m_plen = m_pat.size();
 	m_ignoreCase = (opt & IGNORE_CASE) != 0;
 	const int WORD_SIZE = 0x10000;
 	//m_pat = string(pat, pat+sz);
@@ -44,6 +44,20 @@ bool StrSearch::setup(cchar *pat, /*int sz,*/ uint opt, uchar algorithm)
 		}
 		//if( algorithm == SHIFT_AND )
 			m_doSearchFunc = &StrSearch::a_bitmap_strstr;
+		break;
+	case BNDM: 
+		if( plen > 32 ) return false;;
+		m_CV = new RegType[WORD_SIZE]();		//	() for 0 で初期化
+		if( !m_ignoreCase ) {
+			for(int i = plen - 1, mask = 1; i >= 0; --i, mask<<=1)
+				m_CV[pat[i]] |= mask;
+		} else {
+			for(int i = plen - 1, mask = 1; i >= 0; --i, mask<<=1) {
+				m_CV[tolower(pat[i])] |= mask;
+				m_CV[toupper(pat[i])] |= mask;
+			}
+		}
+		m_doSearchFunc = &StrSearch::a_BNDM;
 		break;
 	default:
 		m_doSearchFunc = nullptr;
@@ -153,5 +167,35 @@ cchar* StrSearch::a_bitmap_strstr(cchar* text)
 		R = ((R<<1) + 1) & m_CV[(uchar)*text++];
 		if( (R & Matched) ) return text - 1;
 	}
+	return nullptr;
+}
+cchar* StrSearch::a_BNDM(cchar* text)
+{
+	cchar* tlast = std::strchr(text, '\0');
+	cchar* tend = tlast - m_plen;
+	while( text <= tend ) {
+		int i = m_plen - 1;
+		int last = m_plen;
+		RegType d = ~0;
+		while( i >= 0 && d != 0 ) {
+			d &= m_CV[(uchar)text[i]];
+			--i;
+			if( d != 0 ) {
+				if( i >= 0 )
+					last = i + 1;
+				else
+					return text;
+			}
+			d <<= 1;
+		}
+		text += last;
+	}
+	return nullptr;
+}
+cchar* StrSearch::a_quick_search(cchar* text)
+{
+}
+cchar* StrSearch::a_quick_search_ic(cchar* text)
+{
 	return nullptr;
 }

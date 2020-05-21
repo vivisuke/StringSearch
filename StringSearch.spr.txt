@@ -9,8 +9,8 @@
 ◎ C 05/21 05/21 0.001 ToDo bitap 実装
 ◎ C 05/21 05/21 0.001 問題 strstr(): "aaa....aaaZ" に対して "aaaaZ" がマッチしない？
 ◎ C 05/21 05/21 0.001 ToDo bitap 処理速度計測
-● C 05/21             ToDo 
-● C 05/21             ToDo 
+● C 05/21             ToDo quick search 実装
+● C 05/21             ToDo 検索関数引数を cchar* から const std::string& に変更し、マッチオフセットを返す？
 ● C 05/21             ToDo 
 ● C 05/21             ToDo 
 ● C 05/21             ToDo 

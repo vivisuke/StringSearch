@@ -18,10 +18,10 @@ public:
 		REGEXP = 0x04,
 
 		STRSTR = 0,
-		//QUICK_SEARCH,
+		QUICK_SEARCH,
 		SHIFT_AND,			//	bitap
 		//SAKUSAKU,
-		//BNDM,
+		BNDM,
 		//FORWARD_SBNDM,
 		//STD_REGEX,
 	};
@@ -47,9 +47,13 @@ protected:
 	bool	isMatch(cchar*);
 	bool	isMatchIC(cchar*);		//	大文字小文字同一視 マッチチェック
 	cchar*	a_bitmap_strstr(cchar*);
+	cchar*	a_BNDM(cchar*);
+	cchar*	a_quick_search(cchar*);
+	cchar*	a_quick_search_ic(cchar*);
 	
 private:
 	uint	m_opt;
+	int		m_plen;
 	bool	m_ignoreCase;
 	bool	m_wholeWordOnly;		//	単語単位
 	uchar	m_algorithm;
