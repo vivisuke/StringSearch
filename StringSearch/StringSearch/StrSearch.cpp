@@ -22,6 +22,12 @@ bool StrSearch::setup(cchar *pat, /*int sz,*/ uint opt, uchar algorithm)
 		else
 			m_doSearchFunc = &StrSearch::stristr;		//	英字大文字小文字同一視
 		break;
+	case STRCHRSTR:
+		if( (opt & IGNORE_CASE) == 0 )
+			m_doSearchFunc = &StrSearch::strchrstr;		//	英字大文字小文字区別
+		else
+			m_doSearchFunc = &StrSearch::stristr;		//	英字大文字小文字同一視
+		break;
 	case SHIFT_AND:
 		if( plen > 32 ) return false;;
 		for(int i = 0; i < 0x100; ++i)					//	skip テーブル初期化
@@ -103,6 +109,16 @@ bool StrSearch::isMatchIC(cchar* text)		//	大文字小文字同一視 マッチ
 		//	return false;
 	}
 	return true;
+}
+cchar* StrSearch::strchrstr(cchar*text)			//	マッチした場合はその先頭アドレスを返す、マッチしない場合は nullptr を返す
+{
+	cchar *ptr = strchr(text, m_pat[0]);
+	while( ptr != nullptr ) {
+		if( !strncmp(ptr, &m_pat[0], m_pat.size()) )
+			return ptr;
+		ptr = strchr(ptr+1, m_pat[0]);
+	}
+	return ptr;
 }
 cchar* StrSearch::strstr(cchar* text)		//	マッチした場合はその先頭アドレスを返す、マッチしない場合は nullptr を返す
 {
@@ -194,6 +210,7 @@ cchar* StrSearch::a_BNDM(cchar* text)
 }
 cchar* StrSearch::a_quick_search(cchar* text)
 {
+	return nullptr;
 }
 cchar* StrSearch::a_quick_search_ic(cchar* text)
 {

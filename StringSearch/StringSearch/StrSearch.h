@@ -18,6 +18,7 @@ public:
 		REGEXP = 0x04,
 
 		STRSTR = 0,
+		STRCHRSTR,			//	strchr → strcmp
 		QUICK_SEARCH,
 		SHIFT_AND,			//	bitap
 		//SAKUSAKU,
@@ -44,6 +45,7 @@ protected:
 	cchar*	stristr(cchar*, cchar*);	//	マッチした場合はその先頭アドレスを返す、マッチしない場合は nullptr を返す
 	cchar*	strstr(cchar*);			//	マッチした場合はその先頭アドレスを返す、マッチしない場合は nullptr を返す
 	cchar*	stristr(cchar*);		//	マッチした場合はその先頭アドレスを返す、マッチしない場合は nullptr を返す
+	cchar*	strchrstr(cchar*);			//	マッチした場合はその先頭アドレスを返す、マッチしない場合は nullptr を返す
 	bool	isMatch(cchar*);
 	bool	isMatchIC(cchar*);		//	大文字小文字同一視 マッチチェック
 	cchar*	a_bitmap_strstr(cchar*);
